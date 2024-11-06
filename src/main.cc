@@ -6,6 +6,7 @@
 #include <string>
 #include <cctype>
 #include <unordered_map>
+#include "mman.h"
 
 enum class TokenType {
     Number, Symbol, String, OpenParen, CloseParen
@@ -58,13 +59,11 @@ private:
 
         std::string result;
 
-        // 检查负号
         if (str[i] == '-') {
             result += '-';
             ++i;
         }
 
-        // 读取整数部分
         while (std::isdigit(str[i])) {
             result += str[i];
             ++i;
@@ -90,12 +89,11 @@ private:
     std::string readString(const std::string& str, size_t& start) {
 
         std::string result;
-        size_t i = start + 1; // 跳过起始的双引号
+        size_t i = start + 1;
 
         while (i < str.length()) {
             char currentChar = str[i];
 
-            // 检查转义字符
             if (currentChar == '\\' && i + 1 < str.length()) {
                 char nextChar = str[i + 1];
                 switch (nextChar) {
@@ -109,10 +107,9 @@ private:
                     result += nextChar;
                     break;
                 }
-                i += 2; // 跳过转义字符和它后面的字符
+                i += 2;
             }
             else if (currentChar == '\"') {
-                // 遇到结束的双引号，退出循环
                 ++i;
                 break;
             }
@@ -200,6 +197,21 @@ std::vector<Token> Lexer::tokenize()
 }
 
 #undef current
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main() {
 
