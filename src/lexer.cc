@@ -6,17 +6,16 @@ static bool isValidSymbol(char c) {
 }
 
 Token Lexer::getNumber() {
-        return { TokenType::Number, readNumber(source, position) };
+    return { TokenType::Number, readNumber(source, position) };
 }
 
 Token Lexer::getString() {
     return { TokenType::String, readString(source, position) };
 }
 
-Token Lexer::getIdentifier() {
-    return { TokenType::Symbol, readIdentifier(source, position) };
+Token Lexer::getSymbol() {
+    return { TokenType::Symbol, readSymbol(source, position) };
 }
-
 
 std::string Lexer::readNumber(const std::string& str, size_t& start) {
 
@@ -89,7 +88,7 @@ std::string Lexer::readString(const std::string& str, size_t& start) {
     return result;
 }
 
-std::string Lexer::readIdentifier(const std::string& str, size_t& start) {
+std::string Lexer::readSymbol(const std::string& str, size_t& start) {
 
     size_t i = start;
     std::string identifier;
@@ -135,12 +134,26 @@ std::vector<Token> Lexer::tokenize()
             }
             else
             {
-                tokens.emplace_back(getIdentifier());
+                tokens.emplace_back(getSymbol());
             }
         }
         else if (isValidSymbol(current) && !isdigit(current))
         {
-            tokens.emplace_back(getIdentifier());
+            if (current == '#')
+            {
+                if (source[position + 1] == 't') {
+                    tokens.push_back(Token{ TokenType::Boolean, "t" });
+                    position += 2;
+                    continue;
+                }
+                else if (source[position + 1] == 'f')
+                {
+                    tokens.push_back(Token{ TokenType::Boolean, "f" });
+                    position += 2;
+                    continue;
+                }
+            }
+            tokens.emplace_back(getSymbol());
         }
         else if (std::isdigit(current))
         {

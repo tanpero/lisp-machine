@@ -10,9 +10,11 @@
 #include <cctype>
 #include <unordered_map>
 
-enum class TokenType {
-    Number, Symbol, String, OpenParen, CloseParen
+enum TokenType {
+    Number, Symbol, String, Boolean, OpenParen, CloseParen
 };
+
+
 
 struct Token {
     TokenType type;
@@ -37,11 +39,11 @@ private:
 
     Token getNumber();
     Token getString();
-    Token getIdentifier();
+    Token getSymbol();
 
     std::string readNumber(const std::string& str, size_t& start);
     std::string readString(const std::string& str, size_t& start);
-    std::string readIdentifier(const std::string& str, size_t& start);
+    std::string readSymbol(const std::string& str, size_t& start);
 };
 
 #endif // !_LEXER_HH_
